@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -275,7 +274,7 @@
         let lastProblemText = '';
         let lastSolution = '';
 
-        const apiKey = ''; // PASTE YOUR API KEY HERE
+        const apiKey = 'AIzaSyDEeJkrym65-ZGNzTpY6_wHEMhoDETFX4w';
 
         document.addEventListener('paste', (event) => {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -518,4 +517,3 @@
     </script>
 </body>
 </html>
-
