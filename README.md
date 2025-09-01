@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -257,7 +258,7 @@
             </button>
         </div>
     </div>
-
+    
     <script>
         const wordProblemInput = document.getElementById('wordProblemInput');
         const imageUpload = document.getElementById('imageUpload');
@@ -273,6 +274,8 @@
         let uploadedImageMimeType = null;
         let lastProblemText = '';
         let lastSolution = '';
+
+        const apiKey = ''; // PASTE YOUR API KEY HERE
 
         document.addEventListener('paste', (event) => {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -352,7 +355,7 @@
             imagePreviewContainer.classList.add('hidden');
 
             const systemPrompt = "You are a helpful and expert math tutor. Your task is to solve the provided math word problem, which may be given as text, an image, or both. First, provide a clear, step-by-step solution. Use markdown headings (e.g., ## Step 1) to break down the process. Use LaTeX for all mathematical expressions and formulas. After the solution steps, create a final heading titled 'Final Answer' and clearly state the answer. Do not include any introductory or concluding sentences. The entire output should be a single block of text representing the formatted solution.";
-            const apiKey = ''; // Your API key here
+            
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             const parts = [];
             if (userQuery) {
@@ -430,7 +433,6 @@
             loadingMessage.classList.remove('hidden');
             solutionContainer.classList.add('hidden');
             
-            const apiKey = ''; // Your API key here
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             const payload = {
@@ -516,3 +518,4 @@
     </script>
 </body>
 </html>
+
