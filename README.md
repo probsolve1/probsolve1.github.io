@@ -1,11 +1,12 @@
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProbSolver</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" xintegrity="sha384-GvrxHw0jGz5iG1P5D4z9z5E5q6p7c5O5N5P5q6a7x8E5" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" xintegrity="sha384-jM3l3g0B0s3k3q1g1r1p1d1s1t1u1v1w1x1y1z1=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" xintegrity="sha384-NlO2lJ+s3g2b1b1a1c1d1e1f1g1h1i1j1k1l1m1n1o1p1q1r1s1t1u1v1w1x1y1z1=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
@@ -26,15 +27,9 @@
             animation: gradientBG 15s ease infinite;
         }
         @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .main-container {
             width: 100%;
@@ -66,6 +61,7 @@
             padding: 1.5rem;
             margin-bottom: 1rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
         }
         .solution-box h2 {
             font-size: 1.5rem;
@@ -130,9 +126,7 @@
         .input-bar-button:hover svg {
             fill: #fff;
         }
-        #voiceButton {
-            margin-right: -0.5rem;
-        }
+        #voiceButton { margin-right: -0.5rem; }
         .loading-dots {
             display: flex;
             align-items: center;
@@ -154,22 +148,14 @@
             background-color: #FFC107;
             animation-delay: 0.4s;
         }
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
         @keyframes bounce {
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1.0); }
         }
         @keyframes fadeInAndSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .button-group {
             display: flex;
@@ -215,6 +201,41 @@
         .remove-ss-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        .message-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .message {
+            padding: 1rem;
+            border-radius: 1rem;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            animation: fadeInFromRight 0.3s ease-in-out;
+        }
+        .ai-message {
+            background-color: #242424;
+            color: #e5e7eb;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            animation: fadeInFromLeft 0.3s ease-in-out;
+        }
+        @keyframes fadeInFromRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInFromLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
@@ -222,12 +243,9 @@
         <div class="title-container" id="titleContainer">
             <h1 class="text-4xl font-bold text-white">ProbSolver</h1>
         </div>
-        <div id="solutionContainer" class="solution-box hidden"></div>
-        <div id="imagePreviewContainer" class="hidden">
-            <img id="imagePreview" class="image-preview" />
-            <button id="removeSsButton" class="remove-ss-button hidden">&times;</button>
-        </div>
-        <div id="loadingMessage" class="flex items-center text-gray-500 hidden">
+
+        <div id="messageHistory" class="message-container"></div>
+        <div id="loadingMessage" class="flex items-center text-gray-500 hidden mb-4">
             <div class="loading-dots">
                 <div class="dot"></div>
                 <div class="dot"></div>
@@ -235,6 +253,12 @@
             </div>
             <span>ProbSolver is thinking...</span>
         </div>
+
+        <div id="imagePreviewContainer" class="hidden">
+            <img id="imagePreview" class="image-preview" />
+            <button id="removeSsButton" class="remove-ss-button hidden">&times;</button>
+        </div>
+        
         <div class="input-bar-container">
             <input type="text" id="wordProblemInput" placeholder="Ask ProbSolver" class="input-bar" />
             <label for="imageUpload" class="input-bar-button">
@@ -244,6 +268,16 @@
                 </svg>
             </label>
             <input type="file" id="imageUpload" class="hidden" accept="image/*" />
+            <label for="cameraUpload" class="input-bar-button">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" fill="currentColor"/>
+                    <path d="M18 4H6a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM6 6h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z" fill="currentColor"/>
+                    <path d="M21 7h-2.5a.5.5 0 0 0 0 1H21v-1z" fill="currentColor"/>
+                    <path d="M3 7h2.5a.5.5 0 0 1 0 1H3v-1z" fill="currentColor"/>
+                    <path d="M15 4h-2a.5.5 0 0 0 0 1h2v-1z" fill="currentColor"/>
+                </svg>
+            </label>
+            <input type="file" id="cameraUpload" class="hidden" accept="image/*" capture="camera" />
             <button id="voiceButton" class="input-bar-button">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 14c-1.66 0-3-1.34-3-3V5c0-1.66 1.34-3 3-3s3 1.34 3 3v6c0 1.66-1.34 3-3 3z" fill="currentColor"/>
@@ -257,13 +291,14 @@
             </button>
         </div>
     </div>
-    
+
     <script>
         const wordProblemInput = document.getElementById('wordProblemInput');
         const imageUpload = document.getElementById('imageUpload');
+        const cameraUpload = document.getElementById('cameraUpload');
         const solveButton = document.getElementById('solveButton');
         const voiceButton = document.getElementById('voiceButton');
-        const solutionContainer = document.getElementById('solutionContainer');
+        const messageHistory = document.getElementById('messageHistory');
         const loadingMessage = document.getElementById('loadingMessage');
         const titleContainer = document.getElementById('titleContainer');
         const imagePreview = document.getElementById('imagePreview');
@@ -272,10 +307,42 @@
         let uploadedImageBase64 = null;
         let uploadedImageMimeType = null;
         let lastProblemText = '';
-        let lastSolution = '';
+        const API_KEY = '';
 
-        const apiKey = 'AIzaSyDEeJkrym65-ZGNzTpY6_wHEMhoDETFX4w';
+        function addMessage(text, sender, isImage = false, imageUrl = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+            
+            if (isImage) {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '0.5rem';
+                messageDiv.appendChild(img);
+            } else {
+                messageDiv.innerHTML = text;
+            }
 
+            messageHistory.appendChild(messageDiv);
+            messageHistory.scrollTop = messageHistory.scrollHeight;
+        }
+
+        function parseAndRenderMarkdown(markdown) {
+            let html = '';
+            const lines = markdown.split('\n');
+            lines.forEach(line => {
+                if (line.startsWith('## ')) {
+                    html += `<h2 class="text-xl font-bold mt-4 mb-2">${line.substring(3).trim()}</h2>`;
+                } else if (line.startsWith('* ')) {
+                    html += `<p class="mb-2 ml-4">${line.trim()}</p>`;
+                } else if (line.trim() !== '') {
+                    html += `<p class="mb-2">${line.trim()}</p>`;
+                }
+            });
+            return html;
+        }
+        
         document.addEventListener('paste', (event) => {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
             for (const item of items) {
@@ -316,6 +383,23 @@
             }
         });
 
+        cameraUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImageBase64 = e.target.result.split(',')[1];
+                    uploadedImageMimeType = file.type;
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.classList.remove('hidden');
+                    removeSsButton.classList.remove('hidden');
+                    wordProblemInput.placeholder = 'Image captured. Ready to solve.';
+                    wordProblemInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         removeSsButton.addEventListener('click', () => {
             uploadedImageBase64 = null;
             uploadedImageMimeType = null;
@@ -325,146 +409,116 @@
             wordProblemInput.placeholder = 'Ask ProbSolver';
         });
 
-        function parseAndRenderMarkdown(markdown) {
-            const lines = markdown.split('\n');
-            let html = '';
-            lines.forEach(line => {
-                if (line.startsWith('## ')) {
-                    html += `<h2 class="text-xl font-bold mt-4 mb-2">${line.substring(3).trim()}</h2>`;
-                } else if (line.startsWith('* ')) {
-                     html += `<p class="mb-2 ml-4">${line.trim()}</p>`;
-                } else if (line.trim() !== '') {
-                    html += `<p class="mb-2">${line.trim()}</p>`;
+        async function fetchAndDisplayResponse(prompt, title, systemPrompt, useTools = false, imageParts = []) {
+            loadingMessage.classList.remove('hidden');
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+            
+            const textParts = [{ text: prompt }];
+            const parts = [...textParts, ...imageParts];
+
+            const payload = {
+                contents: [{ parts }],
+                tools: useTools ? [{ "google_search": {} }] : [],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API response error: ${response.status}`);
                 }
-            });
-            return html;
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || `Sorry, I couldn't generate the ${title}.`;
+                
+                loadingMessage.classList.add('hidden');
+                
+                const solutionHtml = `
+                    <div class="solution-box">
+                        <h2>${title}</h2>
+                        ${parseAndRenderMarkdown(text)}
+                        <div class="button-group">
+                            <button id="explainButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">✨ Explain Concept</button>
+                            <button id="practiceButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">✨ Practice Problems</button>
+                            <button id="shortenButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">📝 Shorten it</button>
+                        </div>
+                    </div>
+                `;
+                addMessage(solutionHtml, 'ai');
+                
+                const newSolutionBox = messageHistory.lastChild.querySelector('.solution-box');
+                
+                newSolutionBox.querySelector('#explainButton').addEventListener('click', async () => {
+                    const explainPrompt = `Explain the core mathematical or physics concept behind the following problem in a simple way for a student: "${lastProblemText}".`;
+                    const explainSystemPrompt = "You are a helpful and expert math tutor. Your task is to explain the core concept behind a given problem. Use simple language and markdown to make the explanation easy to understand. Do not provide a solution to the problem. The output should be a single block of text representing the formatted explanation.";
+                    await fetchAndDisplayResponse(explainPrompt, 'Explanation', explainSystemPrompt);
+                });
+                
+                newSolutionBox.querySelector('#practiceButton').addEventListener('click', async () => {
+                    const practicePrompt = `Generate 3 similar practice problems based on the following problem: "${lastProblemText}". Provide the questions and then a separate answer key.`;
+                    const practiceSystemPrompt = "You are a helpful and expert math tutor. Your task is to generate similar practice problems based on a provided problem. Provide the questions and a separate answer key. The entire output should be a single block of text representing the formatted practice problems and their solutions.";
+                    await fetchAndDisplayResponse(practicePrompt, 'Practice Problems', practiceSystemPrompt);
+                });
+
+                newSolutionBox.querySelector('#shortenButton').addEventListener('click', async () => {
+                    const shortenPrompt = `Create a very short summary of the key steps in the solution to this problem: "${lastProblemText}". The summary should be concise and perfect for study notes.`;
+                    const shortenSystemPrompt = "You are a helpful and expert math tutor. Your task is to create a very short, concise summary of the key steps in a solution to a problem. The summary should be perfect for study notes. The entire output should be a single block of text representing the formatted summary.";
+                    await fetchAndDisplayResponse(shortenPrompt, 'Short Notes', shortenSystemPrompt);
+                });
+                
+                renderMathInElement(newSolutionBox, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false},
+                        {left: "\\[", right: "\\]", display: true},
+                        {left: "\\(", right: "\\)", display: false}
+                    ]
+                });
+            } catch (error) {
+                loadingMessage.classList.add('hidden');
+                addMessage(`<p class="text-red-500 text-center">An API error occurred. Please try again. If the problem persists, the API may be temporarily unavailable.</p>`, 'ai');
+                console.error('API Error:', error);
+            }
         }
 
         solveButton.addEventListener('click', async () => {
             const userQuery = wordProblemInput.value.trim();
             lastProblemText = userQuery;
             if (!userQuery && !uploadedImageBase64) {
-                solutionContainer.innerHTML = `<p class="text-red-500 text-center">Please enter a word problem or upload an image.</p>`;
-                solutionContainer.classList.remove('hidden');
+                addMessage(`<p class="text-red-500 text-center">Please enter a word problem or upload an image.</p>`, 'ai');
                 return;
             }
+            
             titleContainer.classList.add('hidden');
-            solutionContainer.classList.add('hidden');
+            
+            if (userQuery) {
+                addMessage(userQuery, 'user');
+            }
+            if (uploadedImageBase64) {
+                addMessage(null, 'user', true, imagePreview.src);
+            }
+
             loadingMessage.classList.remove('hidden');
+            wordProblemInput.value = '';
+            wordProblemInput.placeholder = '';
             imagePreviewContainer.classList.add('hidden');
+            removeSsButton.classList.add('hidden');
 
             const systemPrompt = "You are a helpful and expert math tutor. Your task is to solve the provided math word problem, which may be given as text, an image, or both. First, provide a clear, step-by-step solution. Use markdown headings (e.g., ## Step 1) to break down the process. Use LaTeX for all mathematical expressions and formulas. After the solution steps, create a final heading titled 'Final Answer' and clearly state the answer. Do not include any introductory or concluding sentences. The entire output should be a single block of text representing the formatted solution.";
             
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const parts = [];
-            if (userQuery) {
-                parts.push({ text: userQuery });
-            }
-            if (uploadedImageBase64) {
-                parts.push({
-                    inlineData: {
-                        mimeType: uploadedImageMimeType,
-                        data: uploadedImageBase64
-                    }
-                });
-            }
-            const payload = {
-                contents: [{ parts }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-            };
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't solve that problem.";
-                lastSolution = text;
-                
-                loadingMessage.classList.add('hidden');
-                solutionContainer.innerHTML = parseAndRenderMarkdown(text);
-                solutionContainer.classList.remove('hidden');
-                
-                solutionContainer.innerHTML += `
-                    <div class="button-group">
-                        <button id="explainButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">✨ Explain Concept</button>
-                        <button id="practiceButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">✨ Practice Problems</button>
-                        <button id="shortenButton" class="bg-gray-800 text-gray-300 font-medium py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">📝 Shorten it</button>
-                    </div>
-                `;
+            const imageParts = uploadedImageBase64 ? [{ inlineData: { mimeType: uploadedImageMimeType, data: uploadedImageBase64 } }] : [];
+            await fetchAndDisplayResponse(userQuery, 'Solution', systemPrompt, true, imageParts);
 
-                document.getElementById('explainButton').addEventListener('click', async () => {
-                    const explainPrompt = `Explain the core mathematical or physics concept behind the following problem in a simple way for a student: "${lastProblemText}"`;
-                    await fetchAndDisplayResponse(explainPrompt, 'Explanation');
-                });
-                
-                document.getElementById('practiceButton').addEventListener('click', async () => {
-                    const practicePrompt = `Generate 3 similar practice problems based on the following problem: "${lastProblemText}". Provide the questions and then a separate answer key.`;
-                    await fetchAndDisplayResponse(practicePrompt, 'Practice Problems');
-                });
-
-                document.getElementById('shortenButton').addEventListener('click', async () => {
-                    const shortenPrompt = `Create a very short summary of the key steps in the solution to this problem: "${lastProblemText}". The summary should be concise and perfect for study notes.`;
-                    await fetchAndDisplayResponse(shortenPrompt, 'Short Notes');
-                });
-
-                renderMathInElement(solutionContainer, {
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false},
-                        {left: "\\[", right: "\\]", display: true},
-                        {left: "\\(", right: "\\)", display: false}
-                    ]
-                });
-            } catch (error) {
-                loadingMessage.classList.add('hidden');
-                solutionContainer.innerHTML = `<p class="text-red-500 text-center">An error occurred while solving the problem.</p>`;
-                solutionContainer.classList.remove('hidden');
-                console.error('API Error:', error);
-            }
+            uploadedImageBase64 = null;
         });
-
-        async function fetchAndDisplayResponse(prompt, title) {
-            loadingMessage.classList.remove('hidden');
-            solutionContainer.classList.add('hidden');
-            
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                tools: [{ "google_search": {} }],
-            };
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || `Sorry, I couldn't generate the ${title}.`;
-                
-                loadingMessage.classList.add('hidden');
-                solutionContainer.innerHTML = `<h2>${title}</h2>` + parseAndRenderMarkdown(text);
-                solutionContainer.classList.remove('hidden');
-                renderMathInElement(solutionContainer, {
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false},
-                        {left: "\\[", right: "\\]", display: true},
-                        {left: "\\(", right: "\\)", display: false}
-                    ]
-                });
-            } catch (error) {
-                loadingMessage.classList.add('hidden');
-                solutionContainer.innerHTML = `<p class="text-red-500 text-center">An error occurred while generating the ${title}.</p>`;
-                solutionContainer.classList.remove('hidden');
-                console.error('API Error:', error);
-            }
-        }
 
         wordProblemInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
