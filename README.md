@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -307,7 +307,7 @@
         let uploadedImageBase64 = null;
         let uploadedImageMimeType = null;
         let lastProblemText = '';
-        const API_KEY = '';
+        const API_KEY = 'AIzaSyDEeJkrym65-ZGNzTpY6_wHEMhoDETFX4w';
 
         function addMessage(text, sender, isImage = false, imageUrl = null) {
             const messageDiv = document.createElement('div');
