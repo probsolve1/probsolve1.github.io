@@ -1,4 +1,3 @@
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -242,7 +241,7 @@
 <body>
     <div class="main-container">
         <div class="title-container" id="titleContainer">
-            <h1 class="text-4xl font-bold text-white">nk</h1>
+            <h1 class="text-4xl font-bold text-white">naitik solver </h1>
         </div>
 
         <div id="messageHistory" class="message-container"></div>
@@ -334,11 +333,11 @@
             const lines = markdown.split('\n');
             lines.forEach(line => {
                 if (line.startsWith('## ')) {
-                    html += `<h2 class="text-xl font-bold mt-4 mb-2">${line.substring(3).trim()}</h2>`;
+                    html += <h2 class="text-xl font-bold mt-4 mb-2">${line.substring(3).trim()}</h2>;
                 } else if (line.startsWith('* ')) {
-                    html += `<p class="mb-2 ml-4">${line.trim()}</p>`;
+                    html += <p class="mb-2 ml-4">${line.trim()}</p>;
                 } else if (line.trim() !== '') {
-                    html += `<p class="mb-2">${line.trim()}</p>`;
+                    html += <p class="mb-2">${line.trim()}</p>;
                 }
             });
             return html;
@@ -413,7 +412,7 @@
         async function fetchAndDisplayResponse(prompt, title, systemPrompt, useTools = false, imageParts = []) {
             loadingMessage.classList.remove('hidden');
             
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+            const apiUrl = https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY};
             
             const textParts = [{ text: prompt }];
             const parts = [...textParts, ...imageParts];
@@ -434,11 +433,11 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API response error: ${response.status}`);
+                    throw new Error(API response error: ${response.status});
                 }
 
                 const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || `Sorry, I couldn't generate the ${title}.`;
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || Sorry, I couldn't generate the ${title}.;
                 
                 loadingMessage.classList.add('hidden');
                 
@@ -458,19 +457,19 @@
                 const newSolutionBox = messageHistory.lastChild.querySelector('.solution-box');
                 
                 newSolutionBox.querySelector('#explainButton').addEventListener('click', async () => {
-                    const explainPrompt = `Explain the core mathematical or physics concept behind the following problem in a simple way for a student: "${lastProblemText}".`;
+                    const explainPrompt = Explain the core mathematical or physics concept behind the following problem in a simple way for a student: "${lastProblemText}".;
                     const explainSystemPrompt = "You are a helpful and expert math tutor. Your task is to explain the core concept behind a given problem. Use simple language and markdown to make the explanation easy to understand. Do not provide a solution to the problem. The output should be a single block of text representing the formatted explanation.";
                     await fetchAndDisplayResponse(explainPrompt, 'Explanation', explainSystemPrompt);
                 });
                 
                 newSolutionBox.querySelector('#practiceButton').addEventListener('click', async () => {
-                    const practicePrompt = `Generate 3 similar practice problems based on the following problem: "${lastProblemText}". Provide the questions and then a separate answer key.`;
+                    const practicePrompt = Generate 3 similar practice problems based on the following problem: "${lastProblemText}". Provide the questions and then a separate answer key.;
                     const practiceSystemPrompt = "You are a helpful and expert math tutor. Your task is to generate similar practice problems based on a provided problem. Provide the questions and a separate answer key. The entire output should be a single block of text representing the formatted practice problems and their solutions.";
                     await fetchAndDisplayResponse(practicePrompt, 'Practice Problems', practiceSystemPrompt);
                 });
 
                 newSolutionBox.querySelector('#shortenButton').addEventListener('click', async () => {
-                    const shortenPrompt = `Create a very short summary of the key steps in the solution to this problem: "${lastProblemText}". The summary should be concise and perfect for study notes.`;
+                    const shortenPrompt = Create a very short summary of the key steps in the solution to this problem: "${lastProblemText}". The summary should be concise and perfect for study notes.;
                     const shortenSystemPrompt = "You are a helpful and expert math tutor. Your task is to create a very short, concise summary of the key steps in a solution to a problem. The summary should be perfect for study notes. The entire output should be a single block of text representing the formatted summary.";
                     await fetchAndDisplayResponse(shortenPrompt, 'Short Notes', shortenSystemPrompt);
                 });
@@ -485,7 +484,7 @@
                 });
             } catch (error) {
                 loadingMessage.classList.add('hidden');
-                addMessage(`<p class="text-red-500 text-center">An API error occurred. Please try again. If the problem persists, the API may be temporarily unavailable.</p>`, 'ai');
+                addMessage(<p class="text-red-500 text-center">An API error occurred. Please try again. If the problem persists, the API may be temporarily unavailable.</p>, 'ai');
                 console.error('API Error:', error);
             }
         }
@@ -494,7 +493,7 @@
             const userQuery = wordProblemInput.value.trim();
             lastProblemText = userQuery;
             if (!userQuery && !uploadedImageBase64) {
-                addMessage(`<p class="text-red-500 text-center">Please enter a word problem or upload an image.</p>`, 'ai');
+                addMessage(<p class="text-red-500 text-center">Please enter a word problem or upload an image.</p>, 'ai');
                 return;
             }
             
