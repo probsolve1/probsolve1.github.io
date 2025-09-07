@@ -242,7 +242,7 @@
 <body>
     <div class="main-container">
         <div class="title-container" id="titleContainer">
-            <h1 class="text-4xl font-bold text-white">ProbSolver</h1>
+            <h1 class="text-4xl font-bold text-white">nk</h1>
         </div>
 
         <div id="messageHistory" class="message-container"></div>
